@@ -45,7 +45,7 @@ export default function IntroPage() {
       </div>
 
       <h1
-        className="relative font-display font-black text-black leading-none tracking-tighter"
+        className="relative font-display font-extrabold text-black leading-none tracking-[0.05em]"
         style={{ fontSize: 'clamp(72px, 14vw, 130px)', animation: 'fade-in-up 0.7s ease forwards' }}
       >
         RADAR
