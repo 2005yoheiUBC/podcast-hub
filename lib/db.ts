@@ -1,24 +1,15 @@
-import { createPool } from '@vercel/postgres'
-import type { VercelPool } from '@vercel/postgres'
+import { neon } from '@neondatabase/serverless'
 
-let _pool: VercelPool | null = null
-
-export function getPool(): VercelPool {
-  if (_pool) return _pool
-  const connectionString = process.env.POSTGRES_URL || process.env.DATABASE_URL
+function getClient() {
+  const connectionString = process.env.POSTGRES_URL || process.env.POSTGRES_URL_NON_POOLING || process.env.DATABASE_URL
   if (!connectionString) throw new Error('No DB URL: set POSTGRES_URL or DATABASE_URL')
-  _pool = createPool({ connectionString })
-  return _pool
+  return neon(connectionString)
 }
 
-export async function sql<T = Record<string, unknown>>(
-  strings: TemplateStringsArray,
-  ...values: unknown[]
-): Promise<T[]> {
-  const pool = getPool()
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const result = await (pool.sql as any)(strings, ...values)
-  return result.rows as T[]
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export async function sql<T = Record<string, unknown>>(strings: TemplateStringsArray, ...values: unknown[]): Promise<T[]> {
+  const client = getClient()
+  return (client as any)(strings, ...values) as T[]
 }
 
 export async function initDb() {
