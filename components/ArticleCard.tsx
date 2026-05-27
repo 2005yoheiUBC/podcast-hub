@@ -94,7 +94,7 @@ export default function ArticleCard({ article, onDismiss }: { article: ArticleDa
 
         <a href={article.url} target="_blank" rel="noopener noreferrer"
           onClick={() => interact(article.id, article.category, 'view')} className="block group/link flex-1">
-          <h3 className="font-serif text-[0.95rem] font-bold text-gray-900 leading-snug mb-1.5 group-hover/link:text-gray-600 line-clamp-2 transition-colors">
+          <h3 className="font-serif text-[1.05rem] font-bold text-gray-900 leading-snug mb-1.5 group-hover/link:text-gray-600 line-clamp-2 transition-colors">
             {article.title}
             <ExternalLink size={10} className="inline ml-1 opacity-0 group-hover/link:opacity-40" />
           </h3>
