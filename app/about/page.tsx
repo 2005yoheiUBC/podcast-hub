@@ -94,10 +94,10 @@ export default function AboutPage() {
         </div>
         <div className="grid grid-cols-2 gap-2 text-xs">
           {[
-            { action: 'Mark as episode idea', delta: '+4.0', color: 'text-purple-600 bg-purple-50' },
-            { action: 'Save', delta: '+2.0', color: 'text-blue-600 bg-blue-50' },
-            { action: 'Click to read', delta: '+0.3', color: 'text-gray-600 bg-gray-100' },
-            { action: 'Dismiss', delta: '−1.5', color: 'text-red-500 bg-red-50' },
+            { action: 'Mark as episode idea', delta: '+0.4', color: 'text-purple-600 bg-purple-50' },
+            { action: 'Save', delta: '+0.2', color: 'text-blue-600 bg-blue-50' },
+            { action: 'Click to read', delta: '+0.03', color: 'text-gray-600 bg-gray-100' },
+            { action: 'Dismiss', delta: '−0.15', color: 'text-red-500 bg-red-50' },
           ].map(({ action, delta, color }) => (
             <div key={action} className="flex items-center justify-between px-3 py-2 rounded-lg bg-gray-50 border border-gray-100">
               <span className="text-gray-600">{action}</span>
