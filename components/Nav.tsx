@@ -1,12 +1,13 @@
 'use client'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { Mic, Layers, Bookmark } from 'lucide-react'
+import { Mic, Layers, Bookmark, Info } from 'lucide-react'
 
 const links = [
   { href: '/', label: 'Feed', icon: Mic },
   { href: '/pipeline', label: 'Pipeline', icon: Layers },
   { href: '/saved', label: 'Saved', icon: Bookmark },
+  { href: '/about', label: 'About', icon: Info },
 ]
 
 export default function Nav() {
