@@ -44,7 +44,7 @@ export default function ArticleCard({
 
   if (dismissed) return null
 
-  const timeAgo = formatDistanceToNow(new Date(article.publishedAt), { addSuffix: true })
+  const timeAgo = formatDistanceToNow(new Date(Number(article.publishedAt)), { addSuffix: true })
   const catColor = CATEGORY_COLORS[article.category] || CATEGORY_COLORS.Other
 
   const handleSave = async () => {

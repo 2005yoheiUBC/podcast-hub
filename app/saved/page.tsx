@@ -53,7 +53,7 @@ export default function SavedPage() {
                     </span>
                     <span className="text-xs text-gray-400">{STATUS_LABELS[ep.status] || ep.status}</span>
                     <span className="text-xs text-gray-300 ml-auto">
-                      {formatDistanceToNow(new Date(ep.created_at * 1000), { addSuffix: true })}
+                      {formatDistanceToNow(new Date(Number(ep.created_at) * 1000), { addSuffix: true })}
                     </span>
                   </div>
                   <h3 className="text-sm font-semibold text-gray-900">{ep.title}</h3>
