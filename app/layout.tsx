@@ -6,7 +6,7 @@ import "./globals.css";
 const geist = Geist({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Content Hub",
+  title: "Radar",
   description: "Your personal podcast research dashboard",
 };
 

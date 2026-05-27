@@ -3,7 +3,7 @@ import { Mic, Layers, Bookmark, RefreshCw, Brain, Database } from 'lucide-react'
 export default function AboutPage() {
   return (
     <div className="max-w-2xl mx-auto px-6 pt-10 pb-20">
-      <h1 className="text-2xl font-bold text-gray-900 mb-1">Content Hub</h1>
+      <h1 className="text-2xl font-bold text-gray-900 mb-1">Radar</h1>
       <p className="text-gray-500 text-sm mb-10">Your personal research dashboard for podcast content</p>
 
       {/* What it is */}
