@@ -9,7 +9,6 @@ export async function GET() {
     await initDb()
     return NextResponse.json(await getCategoryWeights())
   } catch (e) {
-    const msg = e instanceof Error ? e.message : String(e)
-    return NextResponse.json({ error: msg }, { status: 500 })
+    return NextResponse.json({ error: e instanceof Error ? e.message : String(e) }, { status: 500 })
   }
 }

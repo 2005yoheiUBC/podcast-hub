@@ -1,13 +1,11 @@
 import { NextResponse } from 'next/server'
-import { getSql, initDb } from '@/lib/db'
+import { sql, initDb } from '@/lib/db'
 
 export async function PATCH(req: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
     await initDb()
-    const sql = getSql()
     const { id } = await params
-    const body = await req.json()
-    const { title, category, status, notes, source_url } = body
+    const { title, category, status, notes, source_url } = await req.json()
     if (title !== undefined) await sql`UPDATE episodes SET title = ${title}, updated_at = EXTRACT(EPOCH FROM NOW())::bigint WHERE id = ${id}`
     if (category !== undefined) await sql`UPDATE episodes SET category = ${category}, updated_at = EXTRACT(EPOCH FROM NOW())::bigint WHERE id = ${id}`
     if (status !== undefined) await sql`UPDATE episodes SET status = ${status}, updated_at = EXTRACT(EPOCH FROM NOW())::bigint WHERE id = ${id}`
@@ -23,7 +21,6 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
 export async function DELETE(_: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
     await initDb()
-    const sql = getSql()
     const { id } = await params
     await sql`DELETE FROM episodes WHERE id = ${id}`
     return NextResponse.json({ ok: true })
