@@ -9,6 +9,7 @@ export interface ArticleData {
   description: string
   url: string
   imageUrl: string | null
+  fallbackImageUrl?: string | null
   source: string
   category: string
   publishedAt: number
@@ -52,6 +53,7 @@ export default function ArticleCard({ article, onDismiss }: { article: ArticleDa
   const [asEpisode, setAsEpisode] = useState(false)
   const [dismissed, setDismissed] = useState(false)
   const [imgFailed, setImgFailed] = useState(false)
+  const [fallbackFailed, setFallbackFailed] = useState(false)
 
   if (dismissed) return null
 
@@ -78,6 +80,9 @@ export default function ArticleCard({ article, onDismiss }: { article: ArticleDa
       {article.imageUrl && !imgFailed ? (
         <img src={article.imageUrl} alt="" className="w-full h-40 object-cover"
           onError={() => setImgFailed(true)} />
+      ) : article.fallbackImageUrl && !fallbackFailed ? (
+        <img src={article.fallbackImageUrl} alt="" className="w-full h-40 object-cover"
+          onError={() => setFallbackFailed(true)} />
       ) : (
         <div className={`w-full h-40 bg-gradient-to-br ${gradient} flex items-end justify-end p-3 overflow-hidden`}>
           <span className={`font-display font-black text-5xl uppercase leading-none select-none ${ghost}`}>

@@ -14,19 +14,25 @@ function processImages(articles: ArticleData[]): ArticleData[] {
   const financeFallbackUsed = new Set<string>()
 
   return articles.map((a) => {
+    let imageUrl = a.imageUrl
+
     // Dedupe real images
-    if (a.imageUrl) {
-      if (seen.has(a.imageUrl)) return { ...a, imageUrl: null }
-      seen.add(a.imageUrl)
-      return a
+    if (imageUrl) {
+      if (seen.has(imageUrl)) {
+        imageUrl = null
+      } else {
+        seen.add(imageUrl)
+      }
     }
-    // Finance fallback
+
+    // Finance: assign fallback (used when real image is absent or fails to load)
     if (a.category === 'Finance') {
       const fallback = getFinanceFallback(a.title, financeFallbackUsed)
-      if (fallback) seen.add(fallback)
-      return { ...a, imageUrl: fallback }
+      if (fallback && !imageUrl) return { ...a, imageUrl: fallback }
+      return { ...a, imageUrl, fallbackImageUrl: fallback }
     }
-    return a
+
+    return { ...a, imageUrl }
   })
 }
 
