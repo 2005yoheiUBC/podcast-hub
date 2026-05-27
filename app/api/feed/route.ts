@@ -23,7 +23,7 @@ export async function GET(req: Request) {
         await sql`
           INSERT INTO articles (id, title, description, url, image_url, source, category, published_at, fetched_at)
           VALUES (${a.id}, ${a.title}, ${a.description}, ${a.url}, ${a.imageUrl}, ${a.source}, ${a.category}, ${a.publishedAt}, ${a.fetchedAt})
-          ON CONFLICT (id) DO UPDATE SET title = EXCLUDED.title, fetched_at = EXCLUDED.fetched_at
+          ON CONFLICT (id) DO UPDATE SET title = EXCLUDED.title, image_url = COALESCE(articles.image_url, EXCLUDED.image_url), fetched_at = EXCLUDED.fetched_at
         `
       }
     }

@@ -8,6 +8,15 @@ import { RefreshCw, Loader2, ChevronLeft, ChevronRight } from 'lucide-react'
 const CATEGORIES = ['All', 'Culture', 'Business', 'Finance', 'Startups']
 const PAGE_SIZE = 9
 
+function dedupeImages(articles: ArticleData[]): ArticleData[] {
+  const seen = new Set<string>()
+  return articles.map((a) => {
+    if (!a.imageUrl || seen.has(a.imageUrl)) return { ...a, imageUrl: null }
+    seen.add(a.imageUrl)
+    return a
+  })
+}
+
 export default function FeedPage() {
   const [articles, setArticles] = useState<ArticleData[]>([])
   const [category, setCategory] = useState('All')
@@ -26,14 +35,14 @@ export default function FeedPage() {
   useEffect(() => {
     setLoading(true)
     setPage(1)
-    load(category).then((data) => { setArticles(data); setLoading(false) })
+    load(category).then((data) => { setArticles(dedupeImages(data)); setLoading(false) })
   }, [category, load])
 
   const handleRefresh = async () => {
     setRefreshing(true)
     setPage(1)
     const data = await load(category, true)
-    setArticles(data)
+    setArticles(dedupeImages(data))
     setRefreshing(false)
   }
 

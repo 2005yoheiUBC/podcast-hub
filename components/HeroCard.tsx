@@ -61,7 +61,7 @@ export default function HeroCard({ article, onDismiss }: { article: ArticleData;
 
             <a href={article.url} target="_blank" rel="noopener noreferrer"
               onClick={() => interact(article.id, article.category, 'view')} className="group/link block">
-              <h2 className={`text-2xl font-bold leading-snug mb-3 group-hover/link:opacity-70 transition-opacity ${dark ? 'text-white' : 'text-gray-900'}`}>
+              <h2 className={`font-serif text-[1.6rem] font-bold leading-snug mb-3 group-hover/link:opacity-70 transition-opacity ${dark ? 'text-white' : 'text-gray-900'}`}>
                 {article.title}
                 <ExternalLink size={13} className="inline ml-2 opacity-0 group-hover/link:opacity-40" />
               </h2>

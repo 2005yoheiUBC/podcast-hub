@@ -1,7 +1,10 @@
 import Parser from 'rss-parser'
 import crypto from 'crypto'
 
-const parser = new Parser({ timeout: 8000 })
+const parser = new Parser({
+  timeout: 8000,
+  customFields: { item: [['media:content', 'mediaContent'], ['media:thumbnail', 'mediaThumbnail']] },
+})
 
 export interface Article {
   id: string
@@ -49,6 +52,24 @@ function stripHtml(html: string): string {
   return html.replace(/<[^>]*>/g, '').replace(/&[a-z]+;/gi, ' ').trim().slice(0, 300)
 }
 
+function extractImage(html: string): string | null {
+  const m = html?.match(/<img[^>]+src=["']([^"']+)["']/)
+  const url = m?.[1]
+  if (!url || url.startsWith('data:') || url.length < 10) return null
+  return url
+}
+
+function pickImage(item: Record<string, unknown>): string | null {
+  return (
+    (item.enclosure as { url?: string })?.url ||
+    (item.mediaContent as { $?: { url?: string } })?.$?.url ||
+    (item.mediaThumbnail as { $?: { url?: string } })?.$?.url ||
+    extractImage(item['content:encoded'] as string || '') ||
+    extractImage(item.content as string || '') ||
+    null
+  )
+}
+
 async function fetchFeed(source: FeedSource): Promise<Article[]> {
   try {
     const feed = await parser.parseURL(source.url)
@@ -58,7 +79,7 @@ async function fetchFeed(source: FeedSource): Promise<Article[]> {
       title: item.title?.trim() || 'Untitled',
       description: stripHtml(item.contentSnippet || item.summary || item.content || ''),
       url: item.link || '',
-      imageUrl: item.enclosure?.url || null,
+      imageUrl: pickImage(item as unknown as Record<string, unknown>),
       source: source.source,
       category: source.category,
       publishedAt: item.pubDate ? new Date(item.pubDate).getTime() : now,
