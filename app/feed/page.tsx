@@ -3,16 +3,29 @@ import { useEffect, useState, useCallback, useRef } from 'react'
 import ArticleCard, { type ArticleData } from '@/components/ArticleCard'
 import HeroCard from '@/components/HeroCard'
 import WeightBar from '@/components/WeightBar'
+import { getFinanceFallback } from '@/lib/fallback-images'
 import { RefreshCw, Loader2, ChevronLeft, ChevronRight } from 'lucide-react'
 
 const CATEGORIES = ['All', 'Culture', 'Business', 'Finance', 'Startups']
 const PAGE_SIZE = 9
 
-function dedupeImages(articles: ArticleData[]): ArticleData[] {
+function processImages(articles: ArticleData[]): ArticleData[] {
   const seen = new Set<string>()
+  const financeFallbackUsed = new Set<string>()
+
   return articles.map((a) => {
-    if (!a.imageUrl || seen.has(a.imageUrl)) return { ...a, imageUrl: null }
-    seen.add(a.imageUrl)
+    // Dedupe real images
+    if (a.imageUrl) {
+      if (seen.has(a.imageUrl)) return { ...a, imageUrl: null }
+      seen.add(a.imageUrl)
+      return a
+    }
+    // Finance fallback
+    if (a.category === 'Finance') {
+      const fallback = getFinanceFallback(a.title, financeFallbackUsed)
+      if (fallback) seen.add(fallback)
+      return { ...a, imageUrl: fallback }
+    }
     return a
   })
 }
@@ -35,14 +48,14 @@ export default function FeedPage() {
   useEffect(() => {
     setLoading(true)
     setPage(1)
-    load(category).then((data) => { setArticles(dedupeImages(data)); setLoading(false) })
+    load(category).then((data) => { setArticles(processImages(data)); setLoading(false) })
   }, [category, load])
 
   const handleRefresh = async () => {
     setRefreshing(true)
     setPage(1)
     const data = await load(category, true)
-    setArticles(dedupeImages(data))
+    setArticles(processImages(data))
     setRefreshing(false)
   }
 
