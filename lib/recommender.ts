@@ -4,7 +4,7 @@ import type { Article } from './feeds'
 export type InteractionType = 'save' | 'episode' | 'dismiss' | 'view'
 
 const INTERACTION_DELTA: Record<InteractionType, number> = {
-  episode: 4.0, save: 2.0, view: 0.3, dismiss: -1.5,
+  episode: 0.4, save: 0.2, view: 0.03, dismiss: -0.15,
 }
 
 export async function getCategoryWeights(): Promise<Record<string, number>> {
@@ -17,9 +17,9 @@ export async function recordInteraction(articleId: string, category: string, typ
   const delta = INTERACTION_DELTA[type]
   await sql`
     INSERT INTO category_weights (category, weight, updated_at)
-    VALUES (${category}, GREATEST(0.1, 1.0 + ${delta}), EXTRACT(EPOCH FROM NOW())::bigint)
+    VALUES (${category}, GREATEST(0.6, LEAST(1.8, 1.0 + ${delta})), EXTRACT(EPOCH FROM NOW())::bigint)
     ON CONFLICT (category) DO UPDATE SET
-      weight = GREATEST(0.1, category_weights.weight + ${delta}),
+      weight = GREATEST(0.6, LEAST(1.8, category_weights.weight + ${delta})),
       updated_at = EXTRACT(EPOCH FROM NOW())::bigint
   `
 }
@@ -32,7 +32,7 @@ export async function scoreArticles(articles: Article[]): Promise<(Article & { s
   const weights = await getCategoryWeights()
   const maxWeight = Math.max(...Object.values(weights), 1)
   return articles
-    .map((a) => ({ ...a, score: ((weights[a.category] ?? 1) / maxWeight) * 0.65 + recencyScore(a.publishedAt) * 0.35 }))
+    .map((a) => ({ ...a, score: Math.sqrt((weights[a.category] ?? 1) / maxWeight) * 0.3 + recencyScore(a.publishedAt) * 0.7 }))
     .sort((a, b) => b.score - a.score)
 }
 
