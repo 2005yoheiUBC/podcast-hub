@@ -5,6 +5,11 @@ import { initDb } from '@/lib/db'
 export const dynamic = 'force-dynamic'
 
 export async function GET() {
-  await initDb()
-  return NextResponse.json(await getCategoryWeights())
+  try {
+    await initDb()
+    return NextResponse.json(await getCategoryWeights())
+  } catch (e) {
+    const msg = e instanceof Error ? e.message : String(e)
+    return NextResponse.json({ error: msg }, { status: 500 })
+  }
 }
