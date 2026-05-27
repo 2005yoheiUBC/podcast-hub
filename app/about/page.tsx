@@ -110,22 +110,52 @@ export default function AboutPage() {
       {/* Sources */}
       <section>
         <h2 className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-4">Sources</h2>
-        <div className="flex gap-4 p-4 rounded-xl bg-gray-50 border border-gray-100 mb-3">
+        <div className="flex gap-4 p-4 rounded-xl bg-gray-50 border border-gray-100 mb-4">
           <Database size={18} className="text-gray-400 shrink-0 mt-0.5" />
           <p className="text-sm text-gray-500 leading-relaxed">
-            13 RSS feeds refresh every 15 minutes automatically. Articles are cached in a Postgres database so
-            the feed loads instantly.
+            13 RSS feeds refresh every 15 minutes automatically. All content belongs to its respective publisher —
+            click any source to visit their site.
           </p>
         </div>
-        <div className="grid grid-cols-2 gap-x-6 gap-y-1.5 text-xs text-gray-500 px-1">
-          {[
-            ['Culture', 'The Verge, Mashable, Reddit OOTL'],
-            ['Business', 'Fortune, Fast Company, Inc.'],
-            ['Finance', 'CNBC, WSJ Markets, Investing.com'],
-            ['Startups', 'TechCrunch, Hacker News, Product Hunt, MIT Tech Review'],
-          ].map(([cat, sources]) => (
-            <div key={cat}>
-              <span className="font-semibold text-gray-700">{cat} </span>{sources}
+        <div className="space-y-3">
+          {([
+            { cat: 'Culture', color: 'bg-pink-100 text-pink-700', sources: [
+              { name: 'The Verge', url: 'https://www.theverge.com' },
+              { name: 'Mashable', url: 'https://mashable.com' },
+              { name: 'Reddit r/OutOfTheLoop', url: 'https://www.reddit.com/r/OutOfTheLoop/' },
+            ]},
+            { cat: 'Business', color: 'bg-blue-100 text-blue-700', sources: [
+              { name: 'Fortune', url: 'https://fortune.com' },
+              { name: 'Fast Company', url: 'https://www.fastcompany.com' },
+              { name: 'Inc.', url: 'https://www.inc.com' },
+            ]},
+            { cat: 'Finance', color: 'bg-green-100 text-green-700', sources: [
+              { name: 'CNBC', url: 'https://www.cnbc.com' },
+              { name: 'WSJ Markets', url: 'https://www.wsj.com/news/markets' },
+              { name: 'Investing.com', url: 'https://www.investing.com' },
+            ]},
+            { cat: 'Startups', color: 'bg-orange-100 text-orange-700', sources: [
+              { name: 'TechCrunch', url: 'https://techcrunch.com' },
+              { name: 'Hacker News', url: 'https://news.ycombinator.com' },
+              { name: 'Product Hunt', url: 'https://www.producthunt.com' },
+              { name: 'MIT Tech Review', url: 'https://www.technologyreview.com' },
+            ]},
+          ] as { cat: string; color: string; sources: { name: string; url: string }[] }[]).map(({ cat, color, sources }) => (
+            <div key={cat} className="p-4 rounded-xl bg-gray-50 border border-gray-100">
+              <span className={`text-xs font-medium px-2 py-0.5 rounded-full ${color} mb-3 inline-block`}>{cat}</span>
+              <div className="flex flex-wrap gap-2">
+                {sources.map(({ name, url }) => (
+                  <a
+                    key={name}
+                    href={url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-xs text-gray-600 hover:text-gray-900 underline underline-offset-2 decoration-gray-300 hover:decoration-gray-600 transition-colors"
+                  >
+                    {name}
+                  </a>
+                ))}
+              </div>
             </div>
           ))}
         </div>
