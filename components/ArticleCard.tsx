@@ -51,6 +51,7 @@ export default function ArticleCard({ article, onDismiss }: { article: ArticleDa
   const [saved, setSaved] = useState(false)
   const [asEpisode, setAsEpisode] = useState(false)
   const [dismissed, setDismissed] = useState(false)
+  const [imgFailed, setImgFailed] = useState(false)
 
   if (dismissed) return null
 
@@ -74,9 +75,9 @@ export default function ArticleCard({ article, onDismiss }: { article: ArticleDa
 
   return (
     <div className="bg-white rounded-xl border border-gray-100 overflow-hidden hover:border-gray-200 hover:shadow-sm transition-all group flex flex-col">
-      {article.imageUrl ? (
+      {article.imageUrl && !imgFailed ? (
         <img src={article.imageUrl} alt="" className="w-full h-40 object-cover"
-          onError={(e) => { (e.target as HTMLImageElement).style.display = 'none' }} />
+          onError={() => setImgFailed(true)} />
       ) : (
         <div className={`w-full h-40 bg-gradient-to-br ${gradient} flex items-end justify-end p-3 overflow-hidden`}>
           <span className={`font-display font-black text-5xl uppercase leading-none select-none ${ghost}`}>

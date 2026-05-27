@@ -24,10 +24,11 @@ export default function HeroCard({ article, onDismiss }: { article: ArticleData;
   const [saved, setSaved] = useState(false)
   const [asEpisode, setAsEpisode] = useState(false)
   const [dismissed, setDismissed] = useState(false)
+  const [imgFailed, setImgFailed] = useState(false)
 
   if (dismissed) return null
 
-  const dark = !article.imageUrl
+  const dark = !article.imageUrl || imgFailed
   const timeAgo = formatDistanceToNow(new Date(Number(article.publishedAt)), { addSuffix: true })
   const catColor = CATEGORY_COLORS[article.category] || CATEGORY_COLORS.Other
 
@@ -101,13 +102,13 @@ export default function HeroCard({ article, onDismiss }: { article: ArticleData;
         </div>
 
         {/* Image */}
-        {article.imageUrl && (
+        {article.imageUrl && !imgFailed && (
           <div className="w-[42%] shrink-0 hidden sm:block">
             <img
               src={article.imageUrl}
               alt=""
               className="w-full h-full object-cover"
-              onError={(e) => { (e.target as HTMLImageElement).parentElement!.style.display = 'none' }}
+              onError={() => setImgFailed(true)}
             />
           </div>
         )}
