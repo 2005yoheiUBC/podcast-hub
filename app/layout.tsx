@@ -15,7 +15,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en" className={`${geist.className} h-full antialiased`}>
       <body className="min-h-full bg-gray-50">
         <Nav />
-        <div className="pt-14">{children}</div>
+        <div className="pt-16">{children}</div>
       </body>
     </html>
   );

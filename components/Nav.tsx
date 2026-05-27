@@ -3,7 +3,7 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 
 const links = [
-  { href: '/', label: 'Feed' },
+  { href: '/feed', label: 'Feed' },
   { href: '/pipeline', label: 'Pipeline' },
   { href: '/saved', label: 'Saved' },
   { href: '/about', label: 'About' },
@@ -12,9 +12,9 @@ const links = [
 export default function Nav() {
   const path = usePathname()
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 bg-white border-b border-gray-100 px-6 h-14 flex items-center justify-between">
-      <Link href="/" className="text-xl font-black text-gray-900 tracking-tight">
-        Radar
+    <nav className="fixed top-0 left-0 right-0 z-50 bg-white border-b border-gray-100 px-6 h-16 flex items-center justify-between">
+      <Link href="/" className="text-2xl font-black text-gray-900 tracking-tighter leading-none">
+        RADAR
       </Link>
       <div className="flex gap-1">
         {links.map(({ href, label }) => (
