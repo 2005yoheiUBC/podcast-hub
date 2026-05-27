@@ -13,7 +13,7 @@ export default function Nav() {
   const path = usePathname()
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-white border-b border-gray-100 px-6 h-16 flex items-center justify-between">
-      <Link href="/" className="text-xl font-bold text-gray-900 tracking-[0.04em] leading-none font-display">
+      <Link href="/" className="text-xl font-extrabold text-gray-900 tracking-tight leading-none font-display">
         RADAR
       </Link>
       <div className="flex gap-1">
