@@ -6,7 +6,7 @@ export const dynamic = 'force-dynamic'
 
 export async function GET() {
   await initDb()
-  const { rows } = await sql`SELECT * FROM episodes ORDER BY updated_at DESC`
+  const rows = await sql`SELECT * FROM episodes ORDER BY updated_at DESC`
   return NextResponse.json(rows)
 }
 
@@ -21,6 +21,6 @@ export async function POST(req: Request) {
     INSERT INTO episodes (id, title, category, status, notes, source_url, article_id)
     VALUES (${id}, ${title}, ${category}, ${status}, ${notes}, ${sourceUrl}, ${articleId})
   `
-  const { rows } = await sql`SELECT * FROM episodes WHERE id = ${id}`
+  const rows = await sql`SELECT * FROM episodes WHERE id = ${id}`
   return NextResponse.json(rows[0])
 }

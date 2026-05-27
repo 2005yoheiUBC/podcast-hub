@@ -11,8 +11,8 @@ const INTERACTION_DELTA: Record<InteractionType, number> = {
 }
 
 export async function getCategoryWeights(): Promise<Record<string, number>> {
-  const { rows } = await sql`SELECT category, weight FROM category_weights`
-  return Object.fromEntries(rows.map((r) => [r.category, r.weight]))
+  const rows = await sql`SELECT category, weight FROM category_weights`
+  return Object.fromEntries(rows.map((r) => [r.category as string, r.weight as number]))
 }
 
 export async function recordInteraction(articleId: string, category: string, type: InteractionType) {
@@ -45,6 +45,6 @@ export async function scoreArticles(articles: Article[]): Promise<(Article & { s
 }
 
 export async function getDismissedArticleIds(): Promise<Set<string>> {
-  const { rows } = await sql`SELECT DISTINCT article_id FROM interactions WHERE type = 'dismiss'`
-  return new Set(rows.map((r) => r.article_id))
+  const rows = await sql`SELECT DISTINCT article_id FROM interactions WHERE type = 'dismiss'`
+  return new Set(rows.map((r) => r.article_id as string))
 }

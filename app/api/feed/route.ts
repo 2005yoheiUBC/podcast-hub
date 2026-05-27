@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server'
 import { fetchAllFeeds } from '@/lib/feeds'
 import { scoreArticles, getDismissedArticleIds } from '@/lib/recommender'
 import { sql, initDb } from '@/lib/db'
+import type { Article } from '@/lib/feeds'
 
 export const dynamic = 'force-dynamic'
 const CACHE_TTL_MS = 15 * 60 * 1000
@@ -12,9 +13,9 @@ export async function GET(req: Request) {
   const category = searchParams.get('category') || 'All'
   const refresh = searchParams.get('refresh') === '1'
 
-  const { rows: latest } = await sql`SELECT MAX(fetched_at) as t FROM articles`
+  const latest = await sql`SELECT MAX(fetched_at) as t FROM articles`
   const lastFetch = latest[0]?.t as number | null
-  const stale = !lastFetch || Date.now() - lastFetch * 1000 > CACHE_TTL_MS
+  const stale = !lastFetch || Date.now() - Number(lastFetch) > CACHE_TTL_MS
 
   if (stale || refresh) {
     const fresh = await fetchAllFeeds()
@@ -30,8 +31,7 @@ export async function GET(req: Request) {
   }
 
   const dismissed = await getDismissedArticleIds()
-
-  const { rows } = await sql`
+  const rows = await sql`
     SELECT id, title, description, url, image_url as "imageUrl", source, category,
            published_at as "publishedAt", fetched_at as "fetchedAt"
     FROM articles
@@ -39,7 +39,7 @@ export async function GET(req: Request) {
     LIMIT 200
   `
 
-  const filtered = rows.filter((a) => !dismissed.has(a.id)) as Parameters<typeof scoreArticles>[0]
+  const filtered = rows.filter((a) => !dismissed.has(a.id as string)) as Article[]
   const scored = await scoreArticles(filtered)
   const result = category === 'All' ? scored : scored.filter((a) => a.category === category)
 

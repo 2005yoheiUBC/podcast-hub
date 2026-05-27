@@ -13,7 +13,7 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
   if (notes !== undefined) await sql`UPDATE episodes SET notes = ${notes}, updated_at = EXTRACT(EPOCH FROM NOW())::bigint WHERE id = ${id}`
   if (source_url !== undefined) await sql`UPDATE episodes SET source_url = ${source_url}, updated_at = EXTRACT(EPOCH FROM NOW())::bigint WHERE id = ${id}`
 
-  const { rows } = await sql`SELECT * FROM episodes WHERE id = ${id}`
+  const rows = await sql`SELECT * FROM episodes WHERE id = ${id}`
   return NextResponse.json(rows[0])
 }
 
